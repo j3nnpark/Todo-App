@@ -43,6 +43,6 @@ extension Header {
 
 struct Header_Previews: PreviewProvider {
     static var previews: some View {
-        Header(viewmodel: Todos(todos: TestData().testData))
+        Header(viewmodel: Todos())
     }
 }

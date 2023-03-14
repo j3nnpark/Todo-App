@@ -7,12 +7,9 @@
 
 import Foundation
 
+@MainActor
 class Todos: ObservableObject {
-    @Published var todos: [Todo]
-    
-    init(todos: [Todo]) {
-        self.todos = todos
-    }
+    @Published var todos = [Todo]()
     
     var incompleteCount: Int {
         return self.todos.filter { !$0.isCompleted }.count
@@ -22,7 +19,24 @@ class Todos: ObservableObject {
         return self.todos.filter { $0.isCompleted }.count
     }
     
+    func fetchTodos() {
+        Task {
+            do {
+                todos = try await TodosRepository.fetchTodos()
+            } catch {
+                print("[Todos] Error while fetching todos: \(error)")
+            }
+        }
+    }
+    
     func addTodo(todo: Todo) {
+        Task {
+            do {
+                try await TodosRepository.setData(todo)
+            } catch {
+                print("[Todos] Error while adding todo: \(error)")
+            }
+        }
         self.todos.append(todo)
     }
     

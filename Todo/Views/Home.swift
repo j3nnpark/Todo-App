@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct Home: View {
-    @StateObject var viewmodel = Todos(todos: TestData().testData)
+    @StateObject var viewmodel = Todos()
     @State var addingSheetPresented = false
     
     var body: some View {
@@ -43,6 +43,9 @@ struct Home: View {
                     .padding([.bottom, .trailing])
                 }
             }
+        }
+        .onAppear {
+            viewmodel.fetchTodos()
         }
     }
 }

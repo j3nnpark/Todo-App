@@ -15,13 +15,14 @@ struct addTodoSheet: View {
     var body: some View {
         NavigationView {
             TextField("Add todo", text: $todoTitle)
-//                .onSubmit {
-//                    viewmodel.addTodo(
-//                        todo: Todo(title: todoTitle, isCompleted: false)
-//                    )
-//                }
+                .textFieldStyle(.roundedBorder)
                 .toolbar {
-                    ToolbarItem {
+                    ToolbarItem(placement: .navigationBarLeading) {
+                        Button("Cancel") {
+                            sheetPresented.toggle()
+                        }
+                    }
+                    ToolbarItem(placement: .navigationBarTrailing) {
                         Button("Add") {
                             sheetPresented.toggle()
                             viewmodel.addTodo(
@@ -30,11 +31,12 @@ struct addTodoSheet: View {
                     }
                 }
         }
+        .padding()
     }
 }
 
 struct addTodoSheet_Previews: PreviewProvider {
     static var previews: some View {
-        addTodoSheet(viewmodel: Todos(todos: TestData().testData), sheetPresented: .constant(true))
+        addTodoSheet(viewmodel: Todos(), sheetPresented: .constant(true))
     }
 }
