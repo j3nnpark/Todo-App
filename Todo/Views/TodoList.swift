@@ -16,18 +16,26 @@ struct TodoList: View {
             Text(filter.rawValue)
                 .fontWeight(.semibold)
             
-            List($todos, editActions: .all) { $todo in
-                switch filter {
-                case .incomplete:
-                    if !todo.isCompleted {
-                        ListRow(todo: $todo)
-                            .listRowSeparator(.hidden)
+            List {
+                ForEach($todos) { $todo in
+                    switch filter {
+                    case .incomplete:
+                        if !todo.isCompleted {
+                            ListRow(todo: $todo)
+                                .listRowSeparator(.hidden)
+                        }
+                    case .complete:
+                        if todo.isCompleted {
+                            ListRow(todo: $todo)
+                                .listRowSeparator(.hidden)
+                        }
                     }
-                case .complete:
-                    if todo.isCompleted {
-                        ListRow(todo: $todo)
-                            .listRowSeparator(.hidden)
+                }
+                .onDelete { indexSet in
+                    indexSet.map { todos[$0] }.forEach { todo in
+                        TodosRepository.removeTodos(todo)
                     }
+                    todos.remove(atOffsets: indexSet)
                 }
             }
             .listStyle(.plain)

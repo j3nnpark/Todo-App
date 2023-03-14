@@ -25,6 +25,16 @@ struct TodosRepository {
         }
         return todos
     }
+    
+    static func toggleCompletion(_ todo: Todo, newValue: Bool) async throws {
+        let document = todosReference.document(todo.id.uuidString)
+        try! await document.updateData(["isCompleted": newValue])
+    }
+    
+    static func removeTodos(_ todo: Todo) {
+        let document = todosReference.document(todo.id.uuidString)
+        document.delete()
+    }
 }
 
 private extension FirebaseFirestore.DocumentReference {

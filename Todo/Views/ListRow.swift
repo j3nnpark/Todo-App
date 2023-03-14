@@ -13,6 +13,9 @@ struct ListRow: View {
     var body: some View {
         HStack {
             Button {
+                Task {
+                    try await TodosRepository.toggleCompletion(todo, newValue: !todo.isCompleted)
+                }
                 todo.isCompleted.toggle()
             } label: {
                 todo.isCompleted ? Image("Checked") : Image("Unchecked")
